@@ -1,10 +1,8 @@
-package com.picktartup.coin.Entity;
+package com.picktartup.coinservice.entity;
 
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Set;
 
 @Builder
 @AllArgsConstructor

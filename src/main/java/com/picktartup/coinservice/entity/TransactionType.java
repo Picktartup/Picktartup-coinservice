@@ -1,4 +1,4 @@
-package com.picktartup.coin.Entity;
+package com.picktartup.coinservice.entity;
 
 public enum TransactionType {
     PAYMENT,

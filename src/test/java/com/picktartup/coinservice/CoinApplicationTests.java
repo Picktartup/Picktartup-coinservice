@@ -1,4 +1,4 @@
-package com.picktartup.coin;
+package com.picktartup.coinservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
