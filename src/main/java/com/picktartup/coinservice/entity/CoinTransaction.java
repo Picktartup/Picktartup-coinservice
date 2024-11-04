@@ -23,7 +23,7 @@ public class CoinTransaction {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    private Long coinAmount;
+    private Double coinAmount;
     private LocalDateTime createdAt;
 
     @ManyToOne

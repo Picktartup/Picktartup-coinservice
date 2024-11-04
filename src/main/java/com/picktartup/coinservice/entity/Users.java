@@ -34,10 +34,10 @@ public class Users {
     private Boolean isActivated;
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-    private Set<Contract> contracts;
-
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-    private Set<CoinTransaction> transactions;
+//    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+//    private Set<Contract> contracts;
+//
+//    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+//    private Set<CoinTransaction> transactions;
 
 }
