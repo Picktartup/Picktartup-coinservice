@@ -36,7 +36,7 @@ public class CoinController {
     // 코인 구매
     @PostMapping("/purchase")
     public ResponseEntity<ApiResponse<CoinPurchaseResponse>> purchaseCoins(@RequestBody CoinPurchaseRequest request) {
-        CoinPurchaseResponse response = coinService.purchaseCoins(request.getWalletId(), request.getAmount());
+        CoinPurchaseResponse response = coinService.purchaseCoins(request.getWalletId(), request.getPaymentId(), request.getAmount());
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
 
