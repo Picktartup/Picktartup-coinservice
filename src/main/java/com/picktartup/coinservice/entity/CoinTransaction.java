@@ -26,6 +26,8 @@ public class CoinTransaction {
     private Double coinAmount;
     private LocalDateTime createdAt;
 
+    private String paymentId;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Users users;
