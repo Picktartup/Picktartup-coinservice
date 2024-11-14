@@ -12,4 +12,6 @@ import lombok.Setter;
 public class CoinExchangeRequest {
     private Long walletId;
     private double exchangeAmount;
+    private String exchangeBank;
+    private String exchangeAccount;
 }
