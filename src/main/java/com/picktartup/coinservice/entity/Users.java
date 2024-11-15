@@ -14,30 +14,34 @@ import java.util.Set;
 @Table(name ="users")
 @Entity
 public class Users {
+
     @Id
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq_generator")
     @SequenceGenerator(name = "users_seq_generator", sequenceName = "users_seq", allocationSize = 1)
-    @Column(name = "users_id")
     private Long userId;
+
+    @Column(name = "username", nullable = false, length = 50)
+    private String username;
+
+    @Column(name = "email", nullable = false, length = 100, unique = true)
+    private String email;
+
+    @Column(name = "encrypted_pwd", nullable = false, length = 100)
+    private String encryptedPwd;
+
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Column(name = "is_activated", nullable = false)
+    private Boolean isActivated = true;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
-
-    private String username;
-    private String email;
-    private String encryptedPwd;
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    private Boolean isActivated;
-    private LocalDateTime createdAt;
-
-//    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-//    private Set<Contract> contracts;
-//
-//    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-//    private Set<CoinTransaction> transactions;
 
 }

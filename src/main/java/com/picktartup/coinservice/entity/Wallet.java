@@ -12,14 +12,17 @@ import lombok.*;
 @Table(name = "wallet")
 @Entity
 public class Wallet {
+
     @Id
+    @Column(name = "wallet_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "wallet_seq_generator")
     @SequenceGenerator(name = "wallet_seq_generator", sequenceName = "wallet_seq", allocationSize = 1)
-    @Column(name = "wallet_id")
     private Long walletId;
 
+    @Column(name = "address", nullable = false, length = 100)
     private String address;
-    private Double balance;
 
+    @Column(name = "balance", nullable = false)
+    private Double balance;
 
 }

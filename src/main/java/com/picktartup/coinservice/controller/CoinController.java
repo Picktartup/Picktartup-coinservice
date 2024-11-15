@@ -36,7 +36,7 @@ public class CoinController {
     // 코인 구매
     @PostMapping("/purchase")
     public ResponseEntity<ApiResponse<CoinPurchaseResponse>> purchaseCoins(@RequestBody CoinPurchaseRequest request) {
-        CoinPurchaseResponse response = coinService.purchaseCoins(request.getWalletId(), request.getPaymentId(), request.getAmount());
+        CoinPurchaseResponse response = coinService.purchaseCoins(request.getWalletId(), request.getAmount(), request.getCoin(), request.getPaymentId(), request.getPaymentMethod());
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
 
@@ -50,7 +50,7 @@ public class CoinController {
     // 코인 현금화
     @PostMapping("/exchange")
     public ResponseEntity<ApiResponse<CoinExchangeResponse>> exchangeCoins(@RequestBody CoinExchangeRequest request) {
-        CoinExchangeResponse response = coinService.exchangeCoins(request.getWalletId(), request.getExchangeAmount());
+        CoinExchangeResponse response = coinService.exchangeCoins(request.getWalletId(), request.getExchangeAmount(), request.getExchangeBank(), request.getExchangeAccount());
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
 }

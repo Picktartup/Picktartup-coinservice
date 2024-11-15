@@ -75,7 +75,7 @@ public class CoinServiceImpl implements CoinService {
 
     // 코인 구매
     @Transactional
-    public CoinPurchaseResponse purchaseCoins(Long walletId, String paymentId, double amount) {
+    public CoinPurchaseResponse purchaseCoins(Long walletId, double amount, double coin, String paymentId, String paymentMethod) {
         // 사용자 정보 확인
         Users user = usersRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -93,24 +93,23 @@ public class CoinServiceImpl implements CoinService {
         }
 
         // 2. 결제가 유효하면 코인 구매 처리를 진행
-        wallet.setBalance(wallet.getBalance() + amount); // 지갑 잔액 업데이트
-
-        // TODO: 토큰 충전 로직 추가
+        wallet.setBalance(wallet.getBalance() + coin); // 지갑 잔액 업데이트
 
         // 3. 거래 정보 저장
         CoinTransaction transaction = CoinTransaction.builder()
-                .transactionType(TransactionType.PAYMENT)
-                .coinAmount(amount)
-                .createdAt(LocalDateTime.now())
+                .tType(TransactionType.PAYMENT)
+                .tCoinAmount(coin)
+                .tCreatedAt(LocalDateTime.now())
                 .users(user)
-                .paymentId(paymentId) // 결제 ID 기록
+                .tPayId(paymentId)
+                .tPayMethod(paymentMethod)
                 .build();
         coinTransactionRepository.save(transaction);
 
         // 4. 응답 객체 생성 후 반환
         return CoinPurchaseResponse.builder()
                 .transactionId(transaction.getTransactionId())
-                .coinAmount(amount)
+                .coinAmount(coin)
                 .walletBalance(wallet.getBalance())
                 .build();
     }
@@ -122,7 +121,7 @@ public class CoinServiceImpl implements CoinService {
 
     // 코인 현금화
     @Transactional
-    public CoinExchangeResponse exchangeCoins(Long walletId, double exchangeAmount) {
+    public CoinExchangeResponse exchangeCoins(Long walletId, double exchangeAmount, String exchangeBank, String exchangeAccount) {
         Users user = usersRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
@@ -144,10 +143,12 @@ public class CoinServiceImpl implements CoinService {
 
         // CoinTransaction 객체 생성
         CoinTransaction transaction = CoinTransaction.builder()
-                .transactionType(TransactionType.valueOf("EXCHANGE"))
-                .coinAmount(exchangeAmount)
-                .createdAt(LocalDateTime.now())
+                .tType(TransactionType.EXCHANGE)
+                .tCoinAmount(exchangeAmount)
+                .tCreatedAt(LocalDateTime.now())
                 .users(user)
+                .tExcBank(exchangeBank)
+                .tExcAccount(exchangeAccount)
                 .build();
         coinTransactionRepository.save(transaction);
 
