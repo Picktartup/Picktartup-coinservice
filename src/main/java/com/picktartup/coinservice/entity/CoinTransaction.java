@@ -51,7 +51,6 @@ public class CoinTransaction {
     @JsonProperty("tExcAccount")
     private String tExcAccount;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private Users users;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 }

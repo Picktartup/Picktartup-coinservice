@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface CoinTransactionRepository extends JpaRepository<CoinTransaction, Long> {
-    List<CoinTransaction> findByUsers_UserId(Long userId);
+    List<CoinTransaction> findByUserId(Long userId);
 }

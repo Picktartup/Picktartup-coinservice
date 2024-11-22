@@ -7,9 +7,8 @@ import com.picktartup.coinservice.entity.CoinTransaction;
 import com.picktartup.coinservice.entity.TransactionType;
 import com.picktartup.coinservice.entity.Users;
 import com.picktartup.coinservice.entity.Wallet;
+import com.picktartup.coinservice.mock.WalletMock;
 import com.picktartup.coinservice.repository.CoinTransactionRepository;
-import com.picktartup.coinservice.repository.UsersRepository;
-import com.picktartup.coinservice.repository.WalletRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,10 +30,6 @@ public class CoinServiceImpl implements CoinService {
     Long userId = Long.valueOf("1");
 
     @Autowired
-    private final UsersRepository usersRepository;
-    @Autowired
-    private final WalletRepository walletRepository;
-    @Autowired
     private final CoinTransactionRepository coinTransactionRepository;
     @Autowired
     private RestTemplate restTemplate;
@@ -42,9 +37,9 @@ public class CoinServiceImpl implements CoinService {
     @Value("${PORTONE_API_SECRET}")
     private String PORTONE_API_SECRET;
 
-    public CoinServiceImpl(UsersRepository usersRepository, WalletRepository walletRepository, CoinTransactionRepository coinTransactionRepository) {
-        this.usersRepository = usersRepository;
-        this.walletRepository = walletRepository;
+    Wallet walletMock = WalletMock.createWalletMock();
+
+    public CoinServiceImpl(CoinTransactionRepository coinTransactionRepository) {
         this.coinTransactionRepository = coinTransactionRepository;
     }
 
@@ -69,38 +64,26 @@ public class CoinServiceImpl implements CoinService {
 
     // 잔여 코인 조회
     public Double getBalance(Long walletId) {
-        Wallet wallet = walletRepository.findById(walletId).orElseThrow(() -> new RuntimeException("지갑을 찾을 수 없습니다."));
-        return wallet.getBalance();
+        return walletMock.getBalance();
     }
 
     // 코인 구매
     @Transactional
     public CoinPurchaseResponse purchaseCoins(Long walletId, double amount, double coin, String paymentId, String paymentMethod) {
-        // 사용자 정보 확인
-        Users user = usersRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        // 사용자 정보 확인
-        Optional<Wallet> walletOpt = walletRepository.findById(walletId);
-        if (walletOpt.isEmpty()) {
-            throw new IllegalArgumentException("지갑을 찾을 수 없습니다.");
-        }
-        Wallet wallet = walletOpt.get();
-
         // 1. PortOne 결제 검증 요청
         if (!validatePayment(paymentId, amount)) {
             throw new IllegalArgumentException("결제 검증에 실패했습니다.");
         }
 
         // 2. 결제가 유효하면 코인 구매 처리를 진행
-        wallet.setBalance(wallet.getBalance() + coin); // 지갑 잔액 업데이트
+        walletMock.setBalance(walletMock.getBalance() + coin); // 지갑 잔액 업데이트
 
         // 3. 거래 정보 저장
         CoinTransaction transaction = CoinTransaction.builder()
                 .tType(TransactionType.PAYMENT)
                 .tCoinAmount(coin)
                 .tCreatedAt(LocalDateTime.now())
-                .users(user)
+                .userId(walletMock.getUsers().getUserId())
                 .tPayId(paymentId)
                 .tPayMethod(paymentMethod)
                 .build();
@@ -110,43 +93,34 @@ public class CoinServiceImpl implements CoinService {
         return CoinPurchaseResponse.builder()
                 .transactionId(transaction.getTransactionId())
                 .coinAmount(coin)
-                .walletBalance(wallet.getBalance())
+                .walletBalance(walletMock.getBalance())
                 .build();
     }
 
     // 코인 구매 내역 조회
     public List<CoinTransaction> getPurchases(Long userId) {
-        return coinTransactionRepository.findByUsers_UserId(userId);
+        return coinTransactionRepository.findByUserId(userId);
     }
 
     // 코인 현금화
     @Transactional
     public CoinExchangeResponse exchangeCoins(Long walletId, double exchangeAmount, String exchangeBank, String exchangeAccount) {
-        Users user = usersRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        Optional<Wallet> walletOpt = walletRepository.findById(walletId);
-        if (walletOpt.isEmpty()) {
-            throw new IllegalArgumentException("지갑을 찾을 수 없습니다.");
-        }
-        Wallet wallet = walletOpt.get();
-
-        if (wallet.getBalance() < exchangeAmount) {
+        if (walletMock.getBalance() < exchangeAmount) {
             throw new IllegalArgumentException("잔액이 부족합니다.");
         }
 
         // 코인 현금화 로직
 
         // 지갑 잔액 반영
-        double balanceBefore = wallet.getBalance();
-        wallet.setBalance(balanceBefore - exchangeAmount);
+        double balanceBefore = walletMock.getBalance();
+        walletMock.setBalance(balanceBefore - exchangeAmount);
 
         // CoinTransaction 객체 생성
         CoinTransaction transaction = CoinTransaction.builder()
                 .tType(TransactionType.EXCHANGE)
                 .tCoinAmount(exchangeAmount)
                 .tCreatedAt(LocalDateTime.now())
-                .users(user)
+                .userId(walletMock.getUsers().getUserId())
                 .tExcBank(exchangeBank)
                 .tExcAccount(exchangeAccount)
                 .build();
@@ -156,7 +130,7 @@ public class CoinServiceImpl implements CoinService {
                 .transactionId(transaction.getTransactionId())
                 .exchangeAmount(exchangeAmount)
                 .balanceBeforeExchange(balanceBefore)
-                .balanceAfterExchange(wallet.getBalance())
+                .balanceAfterExchange(walletMock.getBalance())
                 .build();
     }
 }
