@@ -1,6 +1,5 @@
 package com.picktartup.coinservice.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +9,6 @@ import lombok.*;
 @Setter
 @Getter
 @Table(name = "wallet")
-@Entity
 public class Wallet {
 
     @Id
@@ -25,4 +23,7 @@ public class Wallet {
     @Column(name = "balance", nullable = false)
     private Double balance;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private Users users;
 }

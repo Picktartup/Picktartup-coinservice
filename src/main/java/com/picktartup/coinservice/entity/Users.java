@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Builder
 @AllArgsConstructor
@@ -12,7 +11,6 @@ import java.util.Set;
 @Setter
 @Getter
 @Table(name ="users")
-@Entity
 public class Users {
 
     @Id
@@ -39,9 +37,5 @@ public class Users {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "wallet_id")
-    private Wallet wallet;
 
 }
