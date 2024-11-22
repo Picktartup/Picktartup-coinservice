@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Setter
 @Getter
-@Table(name = "cointransaction")
 @Entity
+@Table(name = "cointransaction")
 public class CoinTransaction {
 
     @Id
