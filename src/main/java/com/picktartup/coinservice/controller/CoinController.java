@@ -1,10 +1,7 @@
 package com.picktartup.coinservice.controller;
 
 import com.picktartup.coinservice.common.dto.ApiResponse;
-import com.picktartup.coinservice.dto.CoinExchangeRequest;
-import com.picktartup.coinservice.dto.CoinExchangeResponse;
-import com.picktartup.coinservice.dto.CoinPurchaseRequest;
-import com.picktartup.coinservice.dto.CoinPurchaseResponse;
+import com.picktartup.coinservice.dto.*;
 import com.picktartup.coinservice.entity.CoinTransaction;
 import com.picktartup.coinservice.service.CoinService;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +48,12 @@ public class CoinController {
     @PostMapping("/exchange")
     public ResponseEntity<ApiResponse<CoinExchangeResponse>> exchangeCoins(@RequestBody CoinExchangeRequest request) {
         CoinExchangeResponse response = coinService.exchangeCoins(request.getWalletId(), request.getExchangeAmount(), request.getExchangeBank(), request.getExchangeAccount());
+        return ResponseEntity.ok(ApiResponse.ok(response));
+    }
+
+    @GetMapping("/{transactionId}/validation")
+    public ResponseEntity<ApiResponse<CoinValidationResponse>> validatePayment(@PathVariable Long transactionId) {
+        CoinValidationResponse response = coinService.validatePayment(transactionId);
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
 }

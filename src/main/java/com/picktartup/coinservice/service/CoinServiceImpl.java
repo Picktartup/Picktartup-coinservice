@@ -2,6 +2,7 @@ package com.picktartup.coinservice.service;
 
 import com.picktartup.coinservice.dto.CoinExchangeResponse;
 import com.picktartup.coinservice.dto.CoinPurchaseResponse;
+import com.picktartup.coinservice.dto.CoinValidationResponse;
 import com.picktartup.coinservice.dto.PaymentResponse;
 import com.picktartup.coinservice.entity.CoinTransaction;
 import com.picktartup.coinservice.entity.TransactionType;
@@ -19,8 +20,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -131,6 +134,19 @@ public class CoinServiceImpl implements CoinService {
                 .exchangeAmount(exchangeAmount)
                 .balanceBeforeExchange(balanceBefore)
                 .balanceAfterExchange(walletMock.getBalance())
+                .build();
+    }
+
+    public CoinValidationResponse validatePayment(Long transactionId) {
+        CoinTransaction transaction = coinTransactionRepository.findByTransactionId(transactionId)
+                .orElseThrow(() -> {
+                    return new NoSuchElementException("거래내역을 찾을 수 없습니다.");
+                });
+
+        return CoinValidationResponse.builder()
+                .transactionId(transaction.getTransactionId())
+                .userId(transaction.getUserId())
+                .amount(BigDecimal.valueOf(transaction.getTCoinAmount()))
                 .build();
     }
 }
