@@ -10,8 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CoinExchangeRequest {
-    private Long walletId;
+    private Long userId;
     private double exchangeAmount;
     private String exchangeBank;
     private String exchangeAccount;
+    private String walletPassword;
 }
