@@ -127,7 +127,6 @@ public class CoinServiceImpl implements CoinService {
         TransactionDto.Request tokenExchangeRequest = TransactionDto.Request.builder()
                 .userId(userId)
                 .transactionId(transaction.getTransactionId())
-                .walletPassword(walletPassword)
                 .amount(exchangeAmount)
                 .build();
         TransactionDto.Response tokenExchangeResponse = walletServiceClient.transmitToAdmin(tokenExchangeRequest);

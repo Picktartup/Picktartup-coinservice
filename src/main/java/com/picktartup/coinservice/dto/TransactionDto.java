@@ -16,7 +16,6 @@ public class TransactionDto {
     public static class Request {
         private Long userId;
         private Long transactionId;
-        private String walletPassword;
         private Double amount; // Picken 단위로 입력
     }
 
