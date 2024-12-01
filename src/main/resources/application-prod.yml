@@ -26,3 +26,38 @@ spring:
         enabled: true    # Liveness 상태를 활성화
       readinessstate:
         enabled: true    # Readiness 상태를 활성화
+
+logging:
+  level:
+    com.picktartup.coinservice: DEBUG
+    org.springframework.web.client: DEBUG
+
+# Circuit Breaker 설정
+resilience4j.circuitbreaker:
+  instances:
+    walletService:
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      waitDurationInOpenState: 30s
+      failureRateThreshold: 50
+      permittedNumberOfCallsInHalfOpenState: 3
+
+# Retry 설정
+resilience4j.retry:
+  instances:
+    walletService:
+      maxAttempts: 3
+      waitDuration: 1s
+      enableExponentialBackoff: true
+      exponentialBackoffMultiplier: 2
+
+# Timeout 설정
+resilience4j.timelimiter:
+  instances:
+    walletService:
+      timeoutDuration: 5s
+      cancelRunningFuture: true
+
+service:
+  wallet:
+    url: http://192.168.0.143:32450/wallet
