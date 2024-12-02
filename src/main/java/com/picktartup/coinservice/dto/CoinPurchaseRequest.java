@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CoinPurchaseRequest {
-    private Long walletId;
+    private Long userId;
     private double amount;
     private double coin;
     private String paymentId;

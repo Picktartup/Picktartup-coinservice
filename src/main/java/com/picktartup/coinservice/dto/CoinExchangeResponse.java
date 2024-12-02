@@ -10,6 +10,5 @@ import lombok.*;
 public class CoinExchangeResponse {
     private Long transactionId;
     private double exchangeAmount;
-    private double balanceBeforeExchange;
     private double balanceAfterExchange;
 }

@@ -25,15 +25,15 @@ public class CoinController {
 
     // 잔여 코인 조회
     @GetMapping("/balance")
-    public ResponseEntity<ApiResponse<Double>> getBalance(@RequestParam Long walletId) {
-        Double balance = coinService.getBalance(walletId);
+    public ResponseEntity<ApiResponse<Double>> getBalance(@RequestParam Long userId) {
+        Double balance = coinService.getBalance(userId);
         return ResponseEntity.ok(ApiResponse.ok(balance));
     }
 
     // 코인 구매
     @PostMapping("/purchase")
     public ResponseEntity<ApiResponse<CoinPurchaseResponse>> purchaseCoins(@RequestBody CoinPurchaseRequest request) {
-        CoinPurchaseResponse response = coinService.purchaseCoins(request.getWalletId(), request.getAmount(), request.getCoin(), request.getPaymentId(), request.getPaymentMethod());
+        CoinPurchaseResponse response = coinService.purchaseCoins(request.getUserId(), request.getAmount(), request.getCoin(), request.getPaymentId(), request.getPaymentMethod());
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
 
@@ -47,7 +47,7 @@ public class CoinController {
     // 코인 현금화
     @PostMapping("/exchange")
     public ResponseEntity<ApiResponse<CoinExchangeResponse>> exchangeCoins(@RequestBody CoinExchangeRequest request) {
-        CoinExchangeResponse response = coinService.exchangeCoins(request.getWalletId(), request.getExchangeAmount(), request.getExchangeBank(), request.getExchangeAccount());
+        CoinExchangeResponse response = coinService.exchangeCoins(request.getUserId(), request.getExchangeAmount(), request.getExchangeBank(), request.getExchangeAccount(), request.getWalletPassword());
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
 
