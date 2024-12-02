@@ -16,9 +16,9 @@ public class PaymentDto {
         @Getter
         @Builder
         public static class Request {
-            private Long transactionId;
+            private String transactionId;
             private Long userId;
-            private BigDecimal amount;
+            private BigDecimal cashAmount;
             private String paymentMethod;
         }
 
