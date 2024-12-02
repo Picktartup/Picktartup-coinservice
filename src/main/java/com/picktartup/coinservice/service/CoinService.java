@@ -13,6 +13,6 @@ public interface CoinService {
     public Double getBalance(Long userId);
     public CoinPurchaseResponse purchaseCoins(Long userId, double amount, double coin, String paymentId, String paymentMethod);
     public List<CoinTransaction> getPurchases(Long userId);
-    public CoinExchangeResponse exchangeCoins(Long userId, double exchangeAmount, String exchangeBank, String exchangeAccount, String walletPassword);
+    public CoinExchangeResponse exchangeCoins(Long userId, double exchangeAmount, String exchangeBank, String exchangeAccount);
     public CoinValidationResponse validatePayment(Long transactionId);
 }

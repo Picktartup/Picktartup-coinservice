@@ -14,5 +14,4 @@ public class CoinExchangeRequest {
     private double exchangeAmount;
     private String exchangeBank;
     private String exchangeAccount;
-    private String walletPassword;
 }
