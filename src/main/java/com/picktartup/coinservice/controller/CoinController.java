@@ -47,7 +47,7 @@ public class CoinController {
     // 코인 현금화
     @PostMapping("/exchange")
     public ResponseEntity<ApiResponse<CoinExchangeResponse>> exchangeCoins(@RequestBody CoinExchangeRequest request) {
-        CoinExchangeResponse response = coinService.exchangeCoins(request.getUserId(), request.getExchangeAmount(), request.getExchangeBank(), request.getExchangeAccount(), request.getWalletPassword());
+        CoinExchangeResponse response = coinService.exchangeCoins(request.getUserId(), request.getExchangeAmount(), request.getExchangeBank(), request.getExchangeAccount());
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
 

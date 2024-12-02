@@ -111,7 +111,7 @@ public class CoinServiceImpl implements CoinService {
 
     // 코인 현금화
     @Transactional
-    public CoinExchangeResponse exchangeCoins(Long userId, double exchangeAmount, String exchangeBank, String exchangeAccount, String walletPassword) {
+    public CoinExchangeResponse exchangeCoins(Long userId, double exchangeAmount, String exchangeBank, String exchangeAccount) {
         // CoinTransaction 객체 생성 및 저장
         CoinTransaction transaction = CoinTransaction.builder()
                 .tType(TransactionType.EXCHANGE)
