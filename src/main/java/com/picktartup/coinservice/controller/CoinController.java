@@ -4,11 +4,13 @@ import com.picktartup.coinservice.common.dto.ApiResponse;
 import com.picktartup.coinservice.dto.*;
 import com.picktartup.coinservice.entity.CoinTransaction;
 import com.picktartup.coinservice.service.CoinService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/coins")
 public class CoinController {
@@ -33,6 +35,8 @@ public class CoinController {
     // 코인 구매
     @PostMapping("/purchase")
     public ResponseEntity<ApiResponse<CoinPurchaseResponse>> purchaseCoins(@RequestBody CoinPurchaseRequest request) {
+        log.info("코인 구매 - 주문번호: {} - {} PCK", request.getPaymentId(), request.getCoin());
+
         CoinPurchaseResponse response = coinService.purchaseCoins(request.getUserId(), request.getAmount(), request.getCoin(), request.getPaymentId(), request.getPaymentMethod());
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
@@ -47,13 +51,15 @@ public class CoinController {
     // 코인 현금화
     @PostMapping("/exchange")
     public ResponseEntity<ApiResponse<CoinExchangeResponse>> exchangeCoins(@RequestBody CoinExchangeRequest request) {
+        log.info("코인 현금화 - 유저: {} - {} PCK", request.getUserId(), request.getExchangeAccount());
+
         CoinExchangeResponse response = coinService.exchangeCoins(request.getUserId(), request.getExchangeAmount(), request.getExchangeBank(), request.getExchangeAccount());
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
 
-    @GetMapping("/{transactionId}/validation")
-    public ResponseEntity<ApiResponse<CoinValidationResponse>> validatePayment(@PathVariable Long transactionId) {
-        CoinValidationResponse response = coinService.validatePayment(transactionId);
-        return ResponseEntity.ok(ApiResponse.ok(response));
-    }
+//    @GetMapping("/{transactionId}/validation")
+//    public ResponseEntity<ApiResponse<CoinValidationResponse>> validatePayment(@PathVariable Long transactionId) {
+//        CoinValidationResponse response = coinService.validatePayment(transactionId);
+//        return ResponseEntity.ok(ApiResponse.ok(response));
+//    }
 }

@@ -28,18 +28,25 @@ import java.util.Optional;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class CoinServiceImpl implements CoinService {
 
     // 임시
     // Long userId = Long.valueOf("1");
 
+    @Autowired
     private final CoinTransactionRepository coinTransactionRepository;
+    @Autowired
     private final WalletServiceClient walletServiceClient;
+    @Autowired
     private RestTemplate restTemplate;
 
     @Value("${PORTONE_API_SECRET}")
     private String PORTONE_API_SECRET;
+
+    public CoinServiceImpl(CoinTransactionRepository coinTransactionRepository, WalletServiceClient walletServiceClient) {
+        this.coinTransactionRepository = coinTransactionRepository;
+        this.walletServiceClient = walletServiceClient;
+    }
 
 
     // PortOne 결제 검증 메서드
@@ -89,9 +96,9 @@ public class CoinServiceImpl implements CoinService {
 
         // 4. 결제가 유효하면 코인 구매 처리를 진행
         PaymentDto.Callback.Request tokenChargeRequest = PaymentDto.Callback.Request.builder()
-                .transactionId(transaction.getTransactionId())
+                .transactionId(paymentId)
                 .userId(userId)
-                .amount(BigDecimal.valueOf(coin))
+                .cashAmount(BigDecimal.valueOf(amount))
                 .paymentMethod(paymentMethod)
                 .build();
         TransactionDto.Response tokenChargeResponse = walletServiceClient.handlePaymentCallback(tokenChargeRequest);
@@ -140,16 +147,16 @@ public class CoinServiceImpl implements CoinService {
                 .build();
     }
 
-    public CoinValidationResponse validatePayment(Long transactionId) {
-        CoinTransaction transaction = coinTransactionRepository.findByTransactionId(transactionId)
-                .orElseThrow(() -> {
-                    return new NoSuchElementException("거래내역을 찾을 수 없습니다.");
-                });
-
-        return CoinValidationResponse.builder()
-                .transactionId(transaction.getTransactionId())
-                .userId(transaction.getUserId())
-                .amount(BigDecimal.valueOf(transaction.getTCoinAmount()))
-                .build();
-    }
+//    public CoinValidationResponse validatePayment(Long transactionId) {
+//        CoinTransaction transaction = coinTransactionRepository.findByTransactionId(transactionId)
+//                .orElseThrow(() -> {
+//                    return new NoSuchElementException("거래내역을 찾을 수 없습니다.");
+//                });
+//
+//        return CoinValidationResponse.builder()
+//                .transactionId(transaction.getTransactionId())
+//                .userId(transaction.getUserId())
+//                .amount(BigDecimal.valueOf(transaction.getTCoinAmount()))
+//                .build();
+//    }
 }

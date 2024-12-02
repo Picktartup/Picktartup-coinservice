@@ -14,5 +14,5 @@ public interface CoinService {
     public CoinPurchaseResponse purchaseCoins(Long userId, double amount, double coin, String paymentId, String paymentMethod);
     public List<CoinTransaction> getPurchases(Long userId);
     public CoinExchangeResponse exchangeCoins(Long userId, double exchangeAmount, String exchangeBank, String exchangeAccount);
-    public CoinValidationResponse validatePayment(Long transactionId);
+//    public CoinValidationResponse validatePayment(Long transactionId);
 }
