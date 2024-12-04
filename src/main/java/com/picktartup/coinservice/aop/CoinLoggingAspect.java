@@ -49,7 +49,8 @@ public class CoinLoggingAspect {
             long executionTime = System.currentTimeMillis() - startTime;
 
             logData.put("response_time_ms", executionTime);
-            logData.put("status", "success");
+            logData.put("success", true);
+            logData.put("http_status", 200); // 성공 상태 코드
             log.info(objectMapper.writeValueAsString(logData));
             return result;
 
@@ -57,7 +58,8 @@ public class CoinLoggingAspect {
             long executionTime = System.currentTimeMillis() - startTime;
 
             logData.put("response_time_ms", executionTime);
-            logData.put("status", "failed");
+            logData.put("success", false);
+            logData.put("http_status", 500); // 실패 상태 코드
             logData.put("error_message", e.getMessage());
             log.error(objectMapper.writeValueAsString(logData));
             throw e;
@@ -103,7 +105,8 @@ public class CoinLoggingAspect {
             long executionTime = System.currentTimeMillis() - startTime;
 
             logData.put("response_time_ms", executionTime);
-            logData.put("status", "success");
+            logData.put("success", true);
+            logData.put("http_status", 200); // 성공 상태 코드
             log.info(objectMapper.writeValueAsString(logData));
             return result;
 
@@ -111,7 +114,8 @@ public class CoinLoggingAspect {
             long executionTime = System.currentTimeMillis() - startTime;
 
             logData.put("response_time_ms", executionTime);
-            logData.put("status", "failed");
+            logData.put("success", false);
+            logData.put("http_status", 500); // 실패 상태 코드
             logData.put("error_message", e.getMessage());
             log.error(objectMapper.writeValueAsString(logData));
             throw e;
