@@ -60,4 +60,4 @@ resilience4j.timelimiter:
 
 service:
   wallet:
-    url: http://192.168.0.143:32450/wallet
+    url: http://192.168.0.142:30798/wallet
