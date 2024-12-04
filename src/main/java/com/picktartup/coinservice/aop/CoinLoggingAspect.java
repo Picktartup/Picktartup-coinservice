@@ -83,32 +83,5 @@ public class CoinLoggingAspect {
             throw e;
         }
     }
-
-    // 3. 잔액 조회 모니터링
-    @Around("execution(* com.picktartup.coinservice.service.CoinServiceImpl.getBalance(..))")
-    public Object monitorBalanceCheck(ProceedingJoinPoint joinPoint) throws Throwable {
-        LocalDateTime checkTime = LocalDateTime.now();
-        Object[] args = joinPoint.getArgs();
-        Long userId = (Long) args[0];
-
-        Map<String, Object> logData = new HashMap<>();
-        logData.put("event_type", "balance_check");
-        logData.put("user_id", userId);
-        logData.put("timestamp", checkTime.toString());
-        logData.put("hour", checkTime.getHour());
-        logData.put("day_of_week", checkTime.getDayOfWeek().toString());
-
-        try {
-            Object result = joinPoint.proceed();
-            logData.put("status", "success");
-            logData.put("balance", result);
-            log.info(objectMapper.writeValueAsString(logData));
-            return result;
-        } catch (Exception e) {
-            logData.put("status", "failed");
-            logData.put("error_message", e.getMessage());
-            log.error(objectMapper.writeValueAsString(logData));
-            throw e;
-        }
-    }
+    
 }
