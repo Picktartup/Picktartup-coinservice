@@ -61,3 +61,7 @@ resilience4j.timelimiter:
 service:
   wallet:
     url: http://192.168.0.142:32450/wallet
+
+portone:
+  api:
+    secret: ${PORTONE_API_SECRET}
