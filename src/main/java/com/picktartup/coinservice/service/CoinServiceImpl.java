@@ -40,7 +40,7 @@ public class CoinServiceImpl implements CoinService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("${PORTONE_API_SECRET}")
+    @Value("${portone.api.secret}")
     private String PORTONE_API_SECRET;
 
     public CoinServiceImpl(CoinTransactionRepository coinTransactionRepository, WalletServiceClient walletServiceClient) {
