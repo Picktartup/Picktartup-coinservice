@@ -38,8 +38,7 @@ public class WebClientConfig {
                         throw new RuntimeException(e);
                     }
                 })
-                .followRedirect(true)
-                .responseTimeout(Duration.ofSeconds(10)); // 타임아웃 설정
+                .followRedirect(true);
 
         return WebClient.builder()
                 .baseUrl(walletServiceUrl)
